@@ -18,12 +18,11 @@ BuildRequires:	rpmbuild(macros) >= 1.219
 %if %{with python2}
 BuildRequires:	python
 BuildRequires:	python-setuptools
-BuildRequires:	python-six
+%{?with_tests:BuildRequires: python-six}
 %endif
 %if %{with python3}
 BuildRequires:	python3
 BuildRequires:	python3-setuptools
-BuildRequires:	python3-six
 %endif
 Requires:	python-six
 BuildArch:	noarch
@@ -60,12 +59,12 @@ cp -a "$@" py3
 %build
 %if %{with python3}
 cd py3
-%{__python3} setup.py build %{?with_test:test}
+%{__python3} setup.py build %{?with_tests:test}
 cd ..
 %endif
 
 %if %{with python2}
-%{__python} setup.py build %{?with_test:test}
+%{__python} setup.py build %{?with_tests:test}
 %endif
 
 %install
