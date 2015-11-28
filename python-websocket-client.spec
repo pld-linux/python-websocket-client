@@ -50,30 +50,19 @@ python-websocket-client supports only hybi-13.
 %prep
 %setup -q -n websocket-client-%{version}
 
-%if %{with python3}
-set -- *
-install -d py3
-cp -a "$@" py3
-%endif
-
 %build
 %if %{with python3}
-cd py3
-%{__python3} setup.py build %{?with_tests:test}
-cd ..
+%py3_build %{?with_tests:test}
 %endif
 
 %if %{with python2}
-%{__python} setup.py build %{?with_tests:test}
+%py_build %{?with_tests:test}
 %endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %if %{with python3}
-cd py3
-%{__python3} setup.py install --skip-build \
-	--optimize=2 \
-	--root=$RPM_BUILD_ROOT
+%py3_install
 
 mv $RPM_BUILD_ROOT%{_bindir}/{wsdump.py,wsdump-%{py3_ver}}
 
@@ -84,14 +73,10 @@ ln -s %{_sysconfdir}/pki/tls/cert.pem $RPM_BUILD_ROOT%{py3_sitescriptdir}/websoc
 
 # remove tests that got installed into the buildroot
 rm -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/tests
-
-cd ..
 %endif
 
 %if %{with python2}
-%{__python} setup.py install --skip-build \
-	--optimize=2 \
-	--root=$RPM_BUILD_ROOT
+%py_install
 
 %py_postclean
 
