@@ -14,7 +14,7 @@ Source0:	http://pypi.python.org/packages/source/w/websocket-client/websocket-cli
 # Source0-md5:	081dd04bae325bcd20a04f6b8a12ddce
 URL:		http://pypi.python.org/pypi/websocket-client
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.219
+BuildRequires:	rpmbuild(macros) >= 1.710
 %if %{with python2}
 BuildRequires:	python
 BuildRequires:	python-setuptools
