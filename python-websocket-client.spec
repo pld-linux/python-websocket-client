@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_with	tests	# do not perform "make test"
+%bcond_without	tests	# do not perform "make test"
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
@@ -19,11 +19,17 @@ BuildRequires:	rpmbuild(macros) >= 1.710
 %if %{with python2}
 BuildRequires:	python
 BuildRequires:	python-setuptools
-%{?with_tests:BuildRequires: python-six}
+%if %{with tests}
+BuildRequires:	python-backports-ssl_match_hostname
+BuildRequires:	python-six
+%endif
 %endif
 %if %{with python3}
 BuildRequires:	python3
 BuildRequires:	python3-setuptools
+%if %{with tests}
+BuildRequires:	python3-six
+%endif
 %endif
 Requires:	python-six
 BuildArch:	noarch
