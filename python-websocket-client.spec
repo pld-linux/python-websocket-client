@@ -1,18 +1,19 @@
 #
 # Conditional build:
-%bcond_without	tests	# do not perform "make test"
+%bcond_with	tests	# do not perform "make test"
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
-Summary:	WebSocket client for python
-Name:		python-websocket-client
-Version:	0.14.1
+%define 	module	websocket-client
+Summary:	WebSocket client for Python
+Name:		python-%{module}
+Version:	0.35.0
 Release:	1
 License:	LGPL v2
 Group:		Development/Libraries
-Source0:	http://pypi.python.org/packages/source/w/websocket-client/websocket-client-%{version}.tar.gz
-# Source0-md5:	081dd04bae325bcd20a04f6b8a12ddce
-URL:		http://pypi.python.org/pypi/websocket-client
+Source0:	https://pypi.python.org/packages/source/w/websocket-client/websocket_client-%{version}.tar.gz
+# Source0-md5:	37015cccff457f841c6f21bae86fa2d0
+URL:		https://pypi.python.org/pypi/websocket-client
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.710
 %if %{with python2}
@@ -29,7 +30,7 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-python-websocket-client module is WebSocket client for python. This
+python-websocket-client module is WebSocket client for Python. This
 provides the low level APIs for WebSocket. All APIs are the
 synchronous functions.
 
@@ -41,14 +42,14 @@ Group:		Development/Libraries
 Requires:	python3-six
 
 %description -n python3-websocket-client
-python-websocket-client module is WebSocket client for python. This
+python-websocket-client module is WebSocket client for Python. This
 provides the low level APIs for WebSocket. All APIs are the
 synchronous functions.
 
 python-websocket-client supports only hybi-13.
 
 %prep
-%setup -q -n websocket-client-%{version}
+%setup -q -n websocket_client-%{version}
 
 %build
 %if %{with python3}
@@ -72,12 +73,11 @@ rm $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/cacert.pem
 ln -s %{_sysconfdir}/pki/tls/cert.pem $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/cacert.pem
 
 # remove tests that got installed into the buildroot
-rm -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/tests
+rm -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/tests
 %endif
 
 %if %{with python2}
 %py_install
-
 %py_postclean
 
 mv $RPM_BUILD_ROOT%{_bindir}/{wsdump.py,wsdump-%{py_ver}}
@@ -88,7 +88,7 @@ rm $RPM_BUILD_ROOT%{py_sitescriptdir}/websocket/cacert.pem
 ln -s %{_sysconfdir}/pki/tls/cert.pem $RPM_BUILD_ROOT%{py_sitescriptdir}/websocket/cacert.pem
 
 # remove tests that got installed into the buildroot
-rm -r $RPM_BUILD_ROOT/%{py_sitescriptdir}/tests
+rm -r $RPM_BUILD_ROOT%{py_sitescriptdir}/websocket/tests
 %endif
 
 %clean
@@ -114,5 +114,5 @@ rm -rf $RPM_BUILD_ROOT
 %{py3_sitescriptdir}/websocket/*.py
 %{py3_sitescriptdir}/websocket/__pycache__
 %{py3_sitescriptdir}/websocket/cacert.pem
-%{py3_sitescriptdir}/websocket_client_py3-%{version}-py*.egg-info
+%{py3_sitescriptdir}/websocket_client-%{version}-py*.egg-info
 %endif
