@@ -8,7 +8,7 @@
 Summary:	WebSocket client for Python
 Name:		python-%{module}
 Version:	0.35.0
-Release:	2
+Release:	3
 License:	LGPL v2
 Group:		Development/Libraries
 Source0:	https://pypi.python.org/packages/source/w/websocket-client/websocket_client-%{version}.tar.gz
