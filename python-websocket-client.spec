@@ -7,12 +7,12 @@
 %define 	module	websocket-client
 Summary:	WebSocket client for Python
 Name:		python-%{module}
-Version:	0.35.0
-Release:	3
-License:	LGPL v2
+Version:	0.54.0
+Release:	1
+License:	BSD
 Group:		Development/Libraries
 Source0:	https://pypi.python.org/packages/source/w/websocket-client/websocket_client-%{version}.tar.gz
-# Source0-md5:	37015cccff457f841c6f21bae86fa2d0
+# Source0-md5:	386d62d389cdc811fb85ed571924f0ae
 URL:		https://pypi.python.org/pypi/websocket-client
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.710
@@ -73,11 +73,6 @@ rm -rf $RPM_BUILD_ROOT
 
 mv $RPM_BUILD_ROOT%{_bindir}/{wsdump.py,wsdump-%{py3_ver}}
 
-# unbundle cacert
-rm $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/cacert.pem
-# And link in the mozilla ca
-ln -s %{_sysconfdir}/pki/tls/cert.pem $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/cacert.pem
-
 # remove tests that got installed into the buildroot
 rm -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/tests
 %endif
@@ -87,11 +82,6 @@ rm -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/tests
 %py_postclean
 
 mv $RPM_BUILD_ROOT%{_bindir}/{wsdump.py,wsdump-%{py_ver}}
-
-# unbundle cacert
-rm $RPM_BUILD_ROOT%{py_sitescriptdir}/websocket/cacert.pem
-# And link in the mozilla ca
-ln -s %{_sysconfdir}/pki/tls/cert.pem $RPM_BUILD_ROOT%{py_sitescriptdir}/websocket/cacert.pem
 
 # remove tests that got installed into the buildroot
 rm -r $RPM_BUILD_ROOT%{py_sitescriptdir}/websocket/tests
@@ -107,7 +97,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/wsdump-%{py_ver}
 %dir %{py_sitescriptdir}/websocket
 %{py_sitescriptdir}/websocket/*.py[co]
-%{py_sitescriptdir}/websocket/cacert.pem
 %{py_sitescriptdir}/websocket_client-%{version}-py*.egg-info
 %endif
 
@@ -119,6 +108,5 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{py3_sitescriptdir}/websocket
 %{py3_sitescriptdir}/websocket/*.py
 %{py3_sitescriptdir}/websocket/__pycache__
-%{py3_sitescriptdir}/websocket/cacert.pem
 %{py3_sitescriptdir}/websocket_client-%{version}-py*.egg-info
 %endif
