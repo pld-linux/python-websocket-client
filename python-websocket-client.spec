@@ -1,61 +1,80 @@
 #
 # Conditional build:
-%bcond_without	tests	# do not perform "make test"
+%bcond_without	tests	# unit tests
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
 %define 	module	websocket-client
 Summary:	WebSocket client for Python
+Summary(pl.UTF-8):	Klient Webocket dla Pythona
+# keep 0.x here for python2 support
 Name:		python-%{module}
-Version:	0.54.0
-Release:	5
-License:	BSD
-Group:		Development/Libraries
-Source0:	https://pypi.python.org/packages/source/w/websocket-client/websocket_client-%{version}.tar.gz
-# Source0-md5:	386d62d389cdc811fb85ed571924f0ae
-URL:		https://pypi.python.org/pypi/websocket-client
+Version:	0.59.0
+Release:	1
+License:	LGPL v2.1+
+Group:		Libraries/Python
+Source0:	https://files.pythonhosted.org/packages/source/w/websocket-client/%{module}-%{version}.tar.gz
+# Source0-md5:	19ccf9abcd151b30975e7b52bfd02760
+URL:		https://pypi.org/project/websocket-client/
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.710
+BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with python2}
-BuildRequires:	python
+BuildRequires:	python >= 1:2.7.10
 BuildRequires:	python-setuptools
 %if %{with tests}
+BuildRequires:	python-PySocks
 BuildRequires:	python-backports-ssl_match_hostname
 BuildRequires:	python-six
 %endif
 %endif
 %if %{with python3}
-BuildRequires:	python3
+BuildRequires:	python3 >= 1:3.4
 BuildRequires:	python3-setuptools
 %if %{with tests}
+BuildRequires:	python3-PySocks
 BuildRequires:	python3-six
 %endif
 %endif
-Requires:	python-six
+Requires:	python-modules >= 1:2.7.10
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-python-websocket-client module is WebSocket client for Python. This
+Python websocket-client module is WebSocket client for Python. This
 provides the low level APIs for WebSocket. All APIs are the
 synchronous functions.
 
-python-websocket-client supports only hybi-13.
+This module supports only hybi-13.
+
+%description -l pl.UTF-8
+Moduł Pythona websocket-client to klient WebSocket dla Pythona.
+Udostępnia niskopoziomowe API WebSocket. Wszystkie API to funkcje
+synchroniczne.
+
+Ten moduł obsługuje tylko hybi-13.
 
 %package -n python3-websocket-client
-Summary:	WebSocket client for python
+Summary:	WebSocket client for Python
+Summary(pl.UTF-8):	Klient Webocket dla Pythona
 Group:		Development/Libraries
-Requires:	python3-six
+Requires:	python3-modules >= 1:3.4
 
 %description -n python3-websocket-client
-python-websocket-client module is WebSocket client for Python. This
+Python websocket-client module is WebSocket client for Python. This
 provides the low level APIs for WebSocket. All APIs are the
 synchronous functions.
 
-python-websocket-client supports only hybi-13.
+This module supports only hybi-13.
+
+%description -n python3-websocket-client -l pl.UTF-8
+Moduł Pythona websocket-client to klient WebSocket dla Pythona.
+Udostępnia niskopoziomowe API WebSocket. Wszystkie API to funkcje
+synchroniczne.
+
+Ten moduł obsługuje tylko hybi-13.
 
 %prep
-%setup -q -n websocket_client-%{version}
+%setup -q -n %{module}-%{version}
 
 %build
 %if %{with python3}
@@ -71,20 +90,20 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python3}
 %py3_install
 
-mv $RPM_BUILD_ROOT%{_bindir}/{wsdump.py,wsdump-%{py3_ver}}
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/{wsdump.py,wsdump-%{py3_ver}}
 
 # remove tests that got installed into the buildroot
-rm -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/tests
+%{__rm} -r $RPM_BUILD_ROOT%{py3_sitescriptdir}/websocket/tests
 %endif
 
 %if %{with python2}
 %py_install
+
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/{wsdump.py,wsdump-%{py_ver}}
+
 %py_postclean
-
-mv $RPM_BUILD_ROOT%{_bindir}/{wsdump.py,wsdump-%{py_ver}}
-
 # remove tests that got installed into the buildroot
-rm -r $RPM_BUILD_ROOT%{py_sitescriptdir}/websocket/tests
+%{__rm} -r $RPM_BUILD_ROOT%{py_sitescriptdir}/websocket/tests
 %endif
 
 %clean
@@ -93,7 +112,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 %files
 %defattr(644,root,root,755)
-%doc README.rst LICENSE
+%doc ChangeLog README.md
 %attr(755,root,root) %{_bindir}/wsdump-%{py_ver}
 %dir %{py_sitescriptdir}/websocket
 %{py_sitescriptdir}/websocket/*.py[co]
@@ -103,7 +122,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python3}
 %files -n python3-websocket-client
 %defattr(644,root,root,755)
-%doc README.rst LICENSE
+%doc ChangeLog README.md
 %attr(755,root,root) %{_bindir}/wsdump-%{py3_ver}
 %dir %{py3_sitescriptdir}/websocket
 %{py3_sitescriptdir}/websocket/*.py
