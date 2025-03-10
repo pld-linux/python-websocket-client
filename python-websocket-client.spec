@@ -10,7 +10,7 @@ Summary(pl.UTF-8):	Klient Webocket dla Pythona
 # keep 0.x here for python2 support
 Name:		python-%{module}
 Version:	0.59.0
-Release:	1
+Release:	2
 License:	LGPL v2.1+
 Group:		Libraries/Python
 Source0:	https://files.pythonhosted.org/packages/source/w/websocket-client/%{module}-%{version}.tar.gz
